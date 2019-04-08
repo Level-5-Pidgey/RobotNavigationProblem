@@ -65,54 +65,24 @@ namespace RobotNavigationProblem
                 //For each connected/child node around the currently explored node,
                 //generate children
                 foreach (Node neighbour in Map.GetNeighbouringNodes(CurrentNode))
-                {
-                    #region
-                    ////If the neighbour's position is already present on the closed list 
-                    //if (ClosedList.Any((n1) => (n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y)))
-                    //{
-                    //    //We can ignore it and move on as it's already been explored
-                    //    continue;
-                    //}
-                    ////If the child is already on the open list, let's check to see if it's a better
-                    ////and more efficient path than currently
-                    ////If not, add it and assign the parent node as the currently explored node
-                    //else if (OpenList.Any(n1 => n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y))
-                    //{
-                    //    neighbour.Parent = CurrentNode;
-                    //    float MoveCost = neighbour.Parent.GCost + neighbour.Parent.HCost;
-
-                    //    //If the currentNode's FCost is less than the neighbour's FCost, swap the parents over
-                    //    if (CurrentNode.GCost + CurrentNode.HCost < MoveCost)
-                    //    {
-                    //        //linq expression to find the index of the neighbour within the OpenList
-                    //        int index = OpenList.FindIndex((n1) => n1 == neighbour);
-
-                    //        OpenList[index].Parent = CurrentNode;
-                    //        OpenList[index].GCost = OpenList[index].Parent.GCost + OpenList[index].Parent.HCost;
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    neighbour.Parent = CurrentNode;
-                    //    neighbour.GCost = neighbour.Parent.GCost + neighbour.Parent.HCost;
-                    //    neighbour.HCost = GetManhattanDistance(neighbour, goalNode);
-
-                    //    OpenList.Add(neighbour);
-                    //}
-                    #endregion
-
-                    if(!Map.IsValid(neighbour.Position) || ClosedList.Any((n1) => (n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y)))
+                { 
+                    //If the neighbour's position is already present on the closed list 
+                    if (!Map.IsValid(neighbour.Position) || ClosedList.Any((n1) => (n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y)))
                     {
+                        //If it is, we can ignore this neighbour, it's not in the direction desired towards the desired goal
                         continue;
                     }
                     float MoveCost = CurrentNode.GCost + GetManhattanDistance(CurrentNode, neighbour);
 
-                    if(MoveCost < neighbour.FCost || !OpenList.Any((n1) => (n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y)))
+                    //If the child is not on the open list or if it's costs are cheaper, calculate heuristics w/ Manhattan distance
+                    //Update existing node/add new
+                    if (MoveCost < neighbour.FCost || !OpenList.Any((n1) => (n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y)))
                     {
                         neighbour.GCost = MoveCost;
                         neighbour.HCost = GetManhattanDistance(neighbour, goalNode);
                         neighbour.Parent = CurrentNode;
 
+                        //If the node isn't present on the open list, it should then be added
                         if(!OpenList.Any((n1) => (n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y)))
                         {
                             OpenList.Add(neighbour);
