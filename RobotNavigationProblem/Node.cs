@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RobotNavigationProblem
 {
-    public class Node
+    public class Node : IEquatable<Node>
     {
         //Need to add depth of node
 
@@ -51,6 +51,26 @@ namespace RobotNavigationProblem
             {
                 return (float)(GCost + HCost);
             }
+        }
+
+
+        //To allow for more easy comparison between nodes, we can implement IEquatable<T> to it -- which allows us to define that when comparing two nodes, we actually want to compare
+        //two positions.
+        //Previously, doing OpenList.Contains(node) would check if there was a *specific* node already present, which meant that in algorithms such as A* where nodes had attached cost values
+        //these comparisons would fail.
+        public bool Equals(Node other)
+        {
+            return null != other && (Position.X == other.Position.X && Position.Y == other.Position.Y);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Node);
+        }
+
+        public override int GetHashCode()
+        {
+            return -425505606 + EqualityComparer<Position>.Default.GetHashCode(Position);
         }
     }
 }

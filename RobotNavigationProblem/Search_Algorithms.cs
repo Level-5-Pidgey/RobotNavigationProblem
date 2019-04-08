@@ -36,10 +36,11 @@ namespace RobotNavigationProblem
             HashSet<Node> ClosedList = new HashSet<Node>();
 
             OpenList.Add(startNode);
-            Node CurrentNode = OpenList[0];
+            Node CurrentNode = CurrentNode = OpenList[0];
 
             while (OpenList.Count > 0)
             {
+                CurrentNode = OpenList[0];
                 //Get the current node
                 //Let the currentNode equal the node with the lowest f value
                 for (int i = 0; i < OpenList.Count; i++)
@@ -57,7 +58,7 @@ namespace RobotNavigationProblem
 
                 //Check if current node is actually the goal
                 //if so, gratz! We can now backtrack and get the finished path.
-                if (CurrentNode.Position.X == goalNode.Position.X && CurrentNode.Position.Y == goalNode.Position.Y)
+                if (CurrentNode.Equals(goalNode))
                 {
                     break;
                 }
@@ -65,9 +66,9 @@ namespace RobotNavigationProblem
                 //For each connected/child node around the currently explored node,
                 //generate children
                 foreach (Node neighbour in Map.GetNeighbouringNodes(CurrentNode))
-                { 
+                {
                     //If the neighbour's position is already present on the closed list 
-                    if (!Map.IsValid(neighbour.Position) || ClosedList.Any((n1) => (n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y)))
+                    if (!Map.IsValid(neighbour.Position) || ClosedList.Contains(neighbour))
                     {
                         //If it is, we can ignore this neighbour, it's not in the direction desired towards the desired goal
                         continue;
@@ -76,14 +77,14 @@ namespace RobotNavigationProblem
 
                     //If the child is not on the open list or if it's costs are cheaper, calculate heuristics w/ Manhattan distance
                     //Update existing node/add new
-                    if (MoveCost < neighbour.FCost || !OpenList.Any((n1) => (n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y)))
+                    if (MoveCost < neighbour.FCost || !OpenList.Contains(neighbour))
                     {
                         neighbour.GCost = MoveCost;
                         neighbour.HCost = GetManhattanDistance(neighbour, goalNode);
                         neighbour.Parent = CurrentNode;
 
                         //If the node isn't present on the open list, it should then be added
-                        if(!OpenList.Any((n1) => (n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y)))
+                        if (!OpenList.Contains(goalNode))
                         {
                             OpenList.Add(neighbour);
                         }
@@ -91,7 +92,7 @@ namespace RobotNavigationProblem
                 }
             }
 
-            if (CurrentNode.Position.X == goalNode.Position.X && CurrentNode.Position.Y == goalNode.Position.Y)
+            if (CurrentNode.Equals(goalNode))
             {
                 return GetFinalPath(startNode, CurrentNode);
             }
@@ -99,7 +100,7 @@ namespace RobotNavigationProblem
             {
                 throw new Exception("Error with A* Algorithm.");
             }
-                       
+
         }
 
         public Path FindDFS(Position start, Position goal)
@@ -119,20 +120,17 @@ namespace RobotNavigationProblem
                 openList.RemoveAt(0);
                 closedList.Add(currentNode);
 
-                if (currentNode.Position.X == goalNode.Position.X && currentNode.Position.Y == goalNode.Position.Y)
+                if (currentNode.Equals(goalNode))
                 {
                     break;
                 }
 
                 foreach (Node neighbour in Map.GetNeighbouringNodes(currentNode))
                 {
-                    if (Map.IsValid(neighbour.Position))
+                    if (closedList.Add(neighbour) && Map.IsValid(neighbour.Position))
                     {
-                        if(closedList.Add(neighbour))
-                        { 
-                            neighbour.Parent = currentNode;
-                            openList.Add(neighbour);
-                        }
+                        neighbour.Parent = currentNode;
+                        openList.Add(neighbour);
                     }
                 }
             }
@@ -142,19 +140,19 @@ namespace RobotNavigationProblem
 
         Path GetFinalPath(Node StartNode, Node FinalNode)
         {
-            Path Finalpath = new Path();
+            Path finalPath = new Path();
             Node curr = FinalNode;
 
             while (curr != null && curr != StartNode)
             {
-                Finalpath.PathCollection.Add(curr);
+                finalPath.PathCollection.Add(curr);
                 curr = curr.Parent;
             }
 
-            Finalpath.PathCollection.Add(StartNode);
-            Finalpath.PathCollection.Reverse();
+            finalPath.PathCollection.Add(StartNode);
+            finalPath.PathCollection.Reverse();
 
-            return Finalpath;
+            return finalPath;
         }
 
         float GetManhattanDistance(Node n1, Node n2)
