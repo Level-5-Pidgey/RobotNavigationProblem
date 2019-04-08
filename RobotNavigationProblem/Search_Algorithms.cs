@@ -62,37 +62,61 @@ namespace RobotNavigationProblem
                     break;
                 }
 
-                //Generate neighbour/child nodes
-                //Let the neighbours of the current nodes equal the adjacent nodes
+                //For each connected/child node around the currently explored node,
+                //generate children
                 foreach (Node neighbour in Map.GetNeighbouringNodes(CurrentNode))
                 {
-                    //Child is on the closedList
-                    //if child is in the closedList
-                    //continue to beginning of for loop
-                    //.Add() in an if statement for a Hash Set works like .Contains()
-                    if (ClosedList.Any(n1 => n1.Position.X == CurrentNode.Position.X && n1.Position.Y == CurrentNode.Position.Y) || !Map.IsValid(neighbour.Position))
+                    #region
+                    ////If the neighbour's position is already present on the closed list 
+                    //if (ClosedList.Any((n1) => (n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y)))
+                    //{
+                    //    //We can ignore it and move on as it's already been explored
+                    //    continue;
+                    //}
+                    ////If the child is already on the open list, let's check to see if it's a better
+                    ////and more efficient path than currently
+                    ////If not, add it and assign the parent node as the currently explored node
+                    //else if (OpenList.Any(n1 => n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y))
+                    //{
+                    //    neighbour.Parent = CurrentNode;
+                    //    float MoveCost = neighbour.Parent.GCost + neighbour.Parent.HCost;
+
+                    //    //If the currentNode's FCost is less than the neighbour's FCost, swap the parents over
+                    //    if (CurrentNode.GCost + CurrentNode.HCost < MoveCost)
+                    //    {
+                    //        //linq expression to find the index of the neighbour within the OpenList
+                    //        int index = OpenList.FindIndex((n1) => n1 == neighbour);
+
+                    //        OpenList[index].Parent = CurrentNode;
+                    //        OpenList[index].GCost = OpenList[index].Parent.GCost + OpenList[index].Parent.HCost;
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    neighbour.Parent = CurrentNode;
+                    //    neighbour.GCost = neighbour.Parent.GCost + neighbour.Parent.HCost;
+                    //    neighbour.HCost = GetManhattanDistance(neighbour, goalNode);
+
+                    //    OpenList.Add(neighbour);
+                    //}
+                    #endregion
+
+                    if(!Map.IsValid(neighbour.Position) || ClosedList.Any((n1) => (n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y)))
                     {
                         continue;
                     }
-                    else if (OpenList.Any(n1 => n1.Position.X == CurrentNode.Position.X && n1.Position.Y == CurrentNode.Position.Y))
-                    {
-                        float MoveCost = neighbour.Parent.GCost + neighbour.Parent.HCost;
+                    float MoveCost = CurrentNode.GCost + GetManhattanDistance(CurrentNode, neighbour);
 
-                        if (CurrentNode.GCost + CurrentNode.HCost < MoveCost)
-                        {
-                            int index = OpenList.FindIndex((n1) => n1 == neighbour);
-
-                            OpenList[index].Parent = CurrentNode;
-                            OpenList[index].GCost = OpenList[index].Parent.GCost + OpenList[index].Parent.HCost;
-                        }
-                    }
-                    else
+                    if(MoveCost < neighbour.FCost || !OpenList.Any((n1) => (n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y)))
                     {
-                        neighbour.Parent = CurrentNode;
-                        neighbour.GCost = neighbour.Parent.GCost + neighbour.Parent.HCost;
+                        neighbour.GCost = MoveCost;
                         neighbour.HCost = GetManhattanDistance(neighbour, goalNode);
+                        neighbour.Parent = CurrentNode;
 
-                        OpenList.Add(neighbour);
+                        if(!OpenList.Any((n1) => (n1.Position.X == neighbour.Position.X && n1.Position.Y == neighbour.Position.Y)))
+                        {
+                            OpenList.Add(neighbour);
+                        }
                     }
                 }
             }
@@ -103,7 +127,7 @@ namespace RobotNavigationProblem
             }
             else
             {
-                throw new Exception("Shit is fucky wucky :(");
+                throw new Exception("Error with A* Algorithm.");
             }
                        
         }
@@ -137,7 +161,6 @@ namespace RobotNavigationProblem
                         if(closedList.Add(neighbour))
                         { 
                             neighbour.Parent = currentNode;
-                            closedList.Add(neighbour);
                             openList.Add(neighbour);
                         }
                     }
@@ -158,6 +181,7 @@ namespace RobotNavigationProblem
                 curr = curr.Parent;
             }
 
+            Finalpath.PathCollection.Add(StartNode);
             Finalpath.PathCollection.Reverse();
 
             return Finalpath;
