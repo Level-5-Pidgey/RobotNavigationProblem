@@ -38,7 +38,7 @@ namespace RobotNavigationProblem
             OpenList.Add(startNode);
             Node CurrentNode = CurrentNode = OpenList[0];
 
-            while (OpenList.Count > 0)
+            while (OpenList.Count != 0)
             {
                 CurrentNode = OpenList[0];
                 //Get the current node
@@ -84,7 +84,7 @@ namespace RobotNavigationProblem
                         neighbour.Parent = CurrentNode;
 
                         //If the node isn't present on the open list, it should then be added
-                        if (!OpenList.Contains(goalNode))
+                        if (!OpenList.Contains(neighbour))
                         {
                             OpenList.Add(neighbour);
                         }
@@ -131,6 +131,97 @@ namespace RobotNavigationProblem
                     {
                         neighbour.Parent = currentNode;
                         openList.Add(neighbour);
+                        closedList.Add(currentNode);
+                    }
+                }
+            }
+
+            return GetFinalPath(startNode, currentNode);
+        }
+
+        public Path FindBFS(Position start, Position goal)
+        {
+            Node startNode = new Node(start);
+            Node goalNode = new Node(goal);
+
+            Queue<Node> openList = new Queue<Node>();
+            HashSet<Node> closedList = new HashSet<Node>();
+
+            Node currentNode = startNode;
+            openList.Enqueue(currentNode);
+
+            while (openList.Count != 0)
+            {
+                currentNode = openList.Dequeue();
+                closedList.Add(currentNode);
+
+                if (currentNode.Equals(goalNode))
+                {
+                    break;
+                }
+
+                foreach (Node neighbour in Map.GetNeighbouringNodes(currentNode))
+                {
+                    if (!closedList.Contains(neighbour) && Map.IsValid(currentNode.Position))
+                    {
+                        neighbour.Parent = currentNode;
+                        openList.Enqueue(neighbour);
+                    }
+                }
+            }
+
+            return GetFinalPath(startNode, currentNode);
+            
+        }
+
+        public Path FindGreedyBest(Position start, Position goal)
+        {
+            Node startNode = new Node(start);
+            Node goalNode = new Node(goal);
+
+            List<Node> openList = new List<Node>();
+            HashSet<Node> closedList = new HashSet<Node>();
+
+            Node currentNode = startNode;
+            openList.Add(currentNode);
+            currentNode.HCost = GetManhattanDistance(currentNode, goalNode);
+
+            while (openList.Count != 0)
+            {
+                currentNode = openList[0];
+                //Get the current node
+                //Let the currentNode equal the node with the lowest f value
+                for (int i = 0; i < openList.Count; i++)
+                {
+                    if (openList[i].HCost < currentNode.HCost)
+                    {
+                        currentNode = openList[i];
+                    }
+                }
+
+                openList.Remove(currentNode);
+                closedList.Add(currentNode);
+
+                if (currentNode.Equals(goalNode))
+                {
+                    break;
+                }
+
+                foreach (Node neighbour in Map.GetNeighbouringNodes(currentNode))
+                {
+                    if (closedList.Contains(neighbour) || !Map.IsValid(neighbour.Position))
+                    {
+                        continue;
+                    }
+
+                    neighbour.HCost = GetManhattanDistance(neighbour, goalNode);
+                    if (currentNode.HCost > neighbour.HCost || !openList.Contains(neighbour))
+                    {
+                        neighbour.Parent = currentNode;
+                        if (!openList.Contains(neighbour))
+                        {
+                            openList.Add(neighbour);
+                        }
                     }
                 }
             }

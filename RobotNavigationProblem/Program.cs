@@ -24,19 +24,19 @@ namespace RobotNavigationProblem
             var timer1 = new System.Diagnostics.Stopwatch();
             timer1.Start();
             Search_Algorithms DFS = new Search_Algorithms(map);
-            Path path = DFS.FindDFS(map.StartPos, map.Goal[1]);
+            Path path = DFS.FindBFS(map.StartPos, map.Goal[0]);
             timer1.Stop();
 
-            Console.WriteLine("\n\rDFS As Positions:");
+            Console.WriteLine("\n\rBFS As Positions:");
             path.PrintPositionOutput();
 
-            Console.WriteLine("\n\rDFS As Directions:");
+            Console.WriteLine("\n\rBFS As Directions:");
             path.PrintDirectionOutput();
 
             var timer2 = new System.Diagnostics.Stopwatch();
             timer2.Start();
             Search_Algorithms AStar = new Search_Algorithms(map);
-            Path path2 = DFS.FindAStar(map.StartPos, map.Goal[1]);
+            Path path2 = DFS.FindAStar(map.StartPos, map.Goal[0]);
             timer2.Stop();
 
             Console.WriteLine("\n\rA* Positions:");
@@ -45,8 +45,21 @@ namespace RobotNavigationProblem
             Console.WriteLine("\n\rA* As Directions:");
             path2.PrintDirectionOutput();
 
+            var timer3 = new System.Diagnostics.Stopwatch();
+            timer3.Start();
+            Search_Algorithms BestFirst = new Search_Algorithms(map);
+            Path path3 = BestFirst.FindGreedyBest(map.StartPos, map.Goal[0]);
+            timer3.Stop();
+
+            Console.WriteLine("\n\rGBFS Positions:");
+            path3.PrintPositionOutput();
+
+            Console.WriteLine("\n\rGBFS As Directions:");
+            path3.PrintDirectionOutput();
+
             Console.WriteLine($"\n\rA* Time taken : {timer2.ElapsedMilliseconds} ms");
-            Console.WriteLine($"\n\rDFS Time taken : {timer1.ElapsedMilliseconds} ms");
+            Console.WriteLine($"\n\rBFS Time taken : {timer1.ElapsedMilliseconds} ms");
+            Console.WriteLine($"\n\rGBFS Time taken : {timer3.ElapsedMilliseconds} ms");
         }
     }
 }
