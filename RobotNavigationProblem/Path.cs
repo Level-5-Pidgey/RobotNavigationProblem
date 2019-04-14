@@ -38,6 +38,7 @@ namespace RobotNavigationProblem
             {
                 Console.Write(GetDirection(PathCollection[i - 1].Position, PathCollection[i].Position) + "; ");
             }
+
             Console.WriteLine(); //New line return after complete output of directions
         }
 
@@ -48,6 +49,8 @@ namespace RobotNavigationProblem
             {
                 Console.Write(n.Position + "; ");
             }
+
+            Console.WriteLine(); //New line return after complete output of directions
         }
 
         private Direction GetDirection(Position posA, Position posB)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.IO;
 
 namespace RobotNavigationProblem
 {
@@ -13,53 +14,124 @@ namespace RobotNavigationProblem
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new Form1());
+            //Variable assignment
+            Map map;
+            bool guiDraw = false;
 
-            Map map = new Map("../../../RobotNav-Test.txt");
+            //Launching program
+            if (args.Length < 2)
+            {
+                throw new ArgumentException("At least 2 arguments expected, please consult the README for additional information");
+            }
 
-            var timer1 = new System.Diagnostics.Stopwatch();
-            timer1.Start();
-            Search_Algorithms DFS = new Search_Algorithms(map);
-            Path path = DFS.FindBFS(map.StartPos, map.Goal[0]);
-            timer1.Stop();
+            //Valid arguments given to run the program in CLI
+            string fileDir = "../../../" + args[0] + ".txt";
+            string pathfindingMethod = args[1];
 
-            Console.WriteLine("\n\rBFS As Positions:");
-            path.PrintPositionOutput();
+            //If "true" (or variants of) are given after valid args, the program will display a GUI format of the pathfinding process
+            if (args.Length == 3)
+            {
+                
+                if (args[2].ToLower() == "t" || args[2].ToLower() == "true" || args[2].ToLower() == "yes")
+                {
+                    guiDraw = true;
+                }
+            }
 
-            Console.WriteLine("\n\rBFS As Directions:");
-            path.PrintDirectionOutput();
+            if(!File.Exists(fileDir))
+            {
+                throw new FileNotFoundException("Your file cannot be located, please check the directory and consult the README for additional information");
+            }
+            else
+            {
+                map = new Map(fileDir);
+            }
 
-            var timer2 = new System.Diagnostics.Stopwatch();
-            timer2.Start();
-            Search_Algorithms AStar = new Search_Algorithms(map);
-            Path path2 = DFS.FindAStar(map.StartPos, map.Goal[0]);
-            timer2.Stop();
+            switch (pathfindingMethod.ToLower())
+            {
+                case "dfs":
+                    {
+                        var pathSearchTimer = new System.Diagnostics.Stopwatch();
+                        pathSearchTimer.Start();
+                        Search_Algorithms pathSearch = new Search_Algorithms(map);
+                        Path path = pathSearch.FindDFS(map.StartPos, map.Goal[1]);
+                        pathSearchTimer.Stop();
 
-            Console.WriteLine("\n\rA* Positions:");
-            path2.PrintPositionOutput();
+                        Console.WriteLine("DFS As Positions:");
+                        path.PrintPositionOutput();
 
-            Console.WriteLine("\n\rA* As Directions:");
-            path2.PrintDirectionOutput();
+                        Console.WriteLine("DFS As Directions:");
+                        path.PrintDirectionOutput();
 
-            var timer3 = new System.Diagnostics.Stopwatch();
-            timer3.Start();
-            Search_Algorithms BestFirst = new Search_Algorithms(map);
-            Path path3 = BestFirst.FindGreedyBest(map.StartPos, map.Goal[0]);
-            timer3.Stop();
+                        Console.WriteLine($"DFS Time taken : { pathSearchTimer.ElapsedMilliseconds } ms");
+                        break;
+                    }
+                case "bfs":
+                    {
+                        var pathSearchTimer = new System.Diagnostics.Stopwatch();
+                        pathSearchTimer.Start();
+                        Search_Algorithms pathSearch = new Search_Algorithms(map);
+                        Path path = pathSearch.FindBFS(map.StartPos, map.Goal[1]);
+                        pathSearchTimer.Stop();
 
-            Console.WriteLine("\n\rGBFS Positions:");
-            path3.PrintPositionOutput();
+                        Console.WriteLine("BFS As Positions:");
+                        path.PrintPositionOutput();
 
-            Console.WriteLine("\n\rGBFS As Directions:");
-            path3.PrintDirectionOutput();
+                        Console.WriteLine("BFS As Directions:");
+                        path.PrintDirectionOutput();
 
-            Console.WriteLine($"\n\rA* Time taken : {timer2.ElapsedMilliseconds} ms");
-            Console.WriteLine($"\n\rBFS Time taken : {timer1.ElapsedMilliseconds} ms");
-            Console.WriteLine($"\n\rGBFS Time taken : {timer3.ElapsedMilliseconds} ms");
+                        Console.WriteLine($"BFS Time taken : { pathSearchTimer.ElapsedMilliseconds } ms");
+                        break;
+                    }
+                case "astar":
+                    {
+                        var pathSearchTimer = new System.Diagnostics.Stopwatch();
+                        pathSearchTimer.Start();
+                        Search_Algorithms pathSearch = new Search_Algorithms(map);
+                        Path path = pathSearch.FindAStar(map.StartPos, map.Goal[1]);
+                        pathSearchTimer.Stop();
+
+                        Console.WriteLine("A* As Positions:");
+                        path.PrintPositionOutput();
+
+                        Console.WriteLine("A* As Directions:");
+                        path.PrintDirectionOutput();
+
+                        Console.WriteLine($"A* Time taken : { pathSearchTimer.ElapsedMilliseconds } ms");
+                        break;
+                    }
+                case "greedybest":
+                    {
+                        var pathSearchTimer = new System.Diagnostics.Stopwatch();
+                        pathSearchTimer.Start();
+                        Search_Algorithms pathSearch = new Search_Algorithms(map);
+                        Path path = pathSearch.FindGreedyBest(map.StartPos, map.Goal[1]);
+                        pathSearchTimer.Stop();
+
+                        Console.WriteLine("Greedy Best First As Positions:");
+                        path.PrintPositionOutput();
+
+                        Console.WriteLine("Greedy Best First As Directions:");
+                        path.PrintDirectionOutput();
+
+                        Console.WriteLine($"Greedy Best First Time taken : { pathSearchTimer.ElapsedMilliseconds } ms");
+                        break;
+                    }
+                default:
+                    {
+                        Console.WriteLine("Invalid/Improper pathfinding type provided. Consult the README for additional information. The program will now exit.");
+                        break;
+                    }
+            }
+
+            //if (guiDraw)
+            //{
+            //    application.enablevisualstyles();
+            //    application.setcompatibletextrenderingdefault(false);
+            //    application.run(new form1());
+            //}
         }
     }
 }

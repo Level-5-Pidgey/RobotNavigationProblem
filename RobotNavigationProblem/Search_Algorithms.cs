@@ -73,14 +73,13 @@ namespace RobotNavigationProblem
                         //If it is, we can ignore this neighbour, it's not in the direction desired towards the desired goal
                         continue;
                     }
-                    float MoveCost = CurrentNode.GCost + GetManhattanDistance(CurrentNode, neighbour);
+                    neighbour.GCost = CurrentNode.GCost + GetManhattanDistance(CurrentNode, neighbour);
+                    neighbour.HCost = GetManhattanDistance(neighbour, goalNode);
 
                     //If the child is not on the open list or if it's costs are cheaper, calculate heuristics w/ Manhattan distance
                     //Update existing node/add new
-                    if (MoveCost < neighbour.FCost || !OpenList.Contains(neighbour))
+                    if (CurrentNode.FCost < neighbour.FCost || !OpenList.Contains(neighbour))
                     {
-                        neighbour.GCost = MoveCost;
-                        neighbour.HCost = GetManhattanDistance(neighbour, goalNode);
                         neighbour.Parent = CurrentNode;
 
                         //If the node isn't present on the open list, it should then be added
@@ -94,6 +93,7 @@ namespace RobotNavigationProblem
 
             if (CurrentNode.Equals(goalNode))
             {
+                Console.WriteLine("(A*) Number of explored nodes: " + (ClosedList.Count() + OpenList.Count()));
                 return GetFinalPath(startNode, CurrentNode);
             }
             else
@@ -127,16 +127,28 @@ namespace RobotNavigationProblem
 
                 foreach (Node neighbour in Map.GetNeighbouringNodes(currentNode))
                 {
-                    if (closedList.Add(neighbour) && Map.IsValid(neighbour.Position))
+                    if (closedList.Contains(neighbour) || !Map.IsValid(neighbour.Position))
+                    {
+                        continue;
+                    }
+
+                    if (!openList.Contains(neighbour))
                     {
                         neighbour.Parent = currentNode;
                         openList.Add(neighbour);
-                        closedList.Add(currentNode);
                     }
                 }
             }
 
-            return GetFinalPath(startNode, currentNode);
+            if (currentNode.Equals(goalNode))
+            {
+                Console.WriteLine("(DFS) Number of explored nodes: " + (closedList.Count() + openList.Count()));
+                return GetFinalPath(startNode, currentNode);
+            }
+            else
+            {
+                throw new Exception("Error with DFS Algorithm.");
+            }
         }
 
         public Path FindBFS(Position start, Position goal)
@@ -162,7 +174,12 @@ namespace RobotNavigationProblem
 
                 foreach (Node neighbour in Map.GetNeighbouringNodes(currentNode))
                 {
-                    if (!closedList.Contains(neighbour) && Map.IsValid(currentNode.Position))
+                    if (closedList.Contains(neighbour) || !Map.IsValid(currentNode.Position))
+                    {
+                        continue;
+                    }
+                    
+                    if (!openList.Contains(neighbour))
                     {
                         neighbour.Parent = currentNode;
                         openList.Enqueue(neighbour);
@@ -170,8 +187,15 @@ namespace RobotNavigationProblem
                 }
             }
 
-            return GetFinalPath(startNode, currentNode);
-            
+            if (currentNode.Equals(goalNode))
+            {
+                Console.WriteLine("(BFS) Number of explored nodes: " + (closedList.Count() + openList.Count()));
+                return GetFinalPath(startNode, currentNode);
+            }
+            else
+            {
+                throw new Exception("Error with BFS Algorithm.");
+            }
         }
 
         public Path FindGreedyBest(Position start, Position goal)
@@ -226,7 +250,15 @@ namespace RobotNavigationProblem
                 }
             }
 
-            return GetFinalPath(startNode, currentNode);
+            if (currentNode.Equals(goalNode))
+            {
+                Console.WriteLine("(GBFS) Number of explored nodes: " + (closedList.Count() + openList.Count()));
+                return GetFinalPath(startNode, currentNode);
+            }
+            else
+            {
+                throw new Exception("Error with Greedy Best First Algorithm.");
+            }
         }
 
         Path GetFinalPath(Node StartNode, Node FinalNode)

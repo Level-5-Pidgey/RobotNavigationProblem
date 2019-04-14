@@ -77,7 +77,7 @@ namespace RobotNavigationProblem
 
                 //Adding the goal states in
                 line = reader.ReadLine();
-                string[] sets = line.Replace(" ", String.Empty).Split('|');
+                string[] sets = line.Replace(" ", string.Empty).Split('|');
                 for (int i = 0; i < sets.Length; i++)
                 {
                     coords = sets[i].Trim('(', ')').Split(',');
