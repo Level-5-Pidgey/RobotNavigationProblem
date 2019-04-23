@@ -56,7 +56,7 @@ namespace RobotNavigationProblem
                         var pathSearchTimer = new System.Diagnostics.Stopwatch();
                         pathSearchTimer.Start();
                         Search_Algorithms pathSearch = new Search_Algorithms(map);
-                        Path path = pathSearch.FindDFS(map.StartPos, map.Goal[1]);
+                        Path path = pathSearch.FindDFS(map.StartPos, map.Goal[0]);
                         pathSearchTimer.Stop();
 
                         Console.WriteLine("DFS As Positions:");
@@ -73,7 +73,7 @@ namespace RobotNavigationProblem
                         var pathSearchTimer = new System.Diagnostics.Stopwatch();
                         pathSearchTimer.Start();
                         Search_Algorithms pathSearch = new Search_Algorithms(map);
-                        Path path = pathSearch.FindBFS(map.StartPos, map.Goal[1]);
+                        Path path = pathSearch.FindBFS(map.StartPos, map.Goal[0]);
                         pathSearchTimer.Stop();
 
                         Console.WriteLine("BFS As Positions:");
@@ -90,7 +90,7 @@ namespace RobotNavigationProblem
                         var pathSearchTimer = new System.Diagnostics.Stopwatch();
                         pathSearchTimer.Start();
                         Search_Algorithms pathSearch = new Search_Algorithms(map);
-                        Path path = pathSearch.FindAStar(map.StartPos, map.Goal[1]);
+                        Path path = pathSearch.FindAStar(map.StartPos, map.Goal[0]);
                         pathSearchTimer.Stop();
 
                         Console.WriteLine("A* As Positions:");
@@ -107,7 +107,7 @@ namespace RobotNavigationProblem
                         var pathSearchTimer = new System.Diagnostics.Stopwatch();
                         pathSearchTimer.Start();
                         Search_Algorithms pathSearch = new Search_Algorithms(map);
-                        Path path = pathSearch.FindGreedyBest(map.StartPos, map.Goal[1]);
+                        Path path = pathSearch.FindGreedyBest(map.StartPos, map.Goal[0]);
                         pathSearchTimer.Stop();
 
                         Console.WriteLine("Greedy Best First As Positions:");
@@ -126,6 +126,7 @@ namespace RobotNavigationProblem
                     }
             }
 
+            Console.ReadLine();
             //if (guiDraw)
             //{
             //    application.enablevisualstyles();

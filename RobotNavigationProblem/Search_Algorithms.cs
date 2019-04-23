@@ -36,7 +36,8 @@ namespace RobotNavigationProblem
             HashSet<Node> ClosedList = new HashSet<Node>();
 
             OpenList.Add(startNode);
-            Node CurrentNode = CurrentNode = OpenList[0];
+            Node CurrentNode = startNode;
+            CurrentNode.HCost = GetManhattanDistance(CurrentNode, goalNode);
 
             while (OpenList.Count != 0)
             {
@@ -45,7 +46,7 @@ namespace RobotNavigationProblem
                 //Let the currentNode equal the node with the lowest f value
                 for (int i = 0; i < OpenList.Count; i++)
                 {
-                    if (OpenList[i].FCost < CurrentNode.FCost || (OpenList[i].FCost == CurrentNode.FCost && OpenList[i].HCost < CurrentNode.HCost))
+                    if (OpenList[i].FCost < CurrentNode.FCost)
                     {
                         CurrentNode = OpenList[i];
                     }
@@ -78,7 +79,7 @@ namespace RobotNavigationProblem
 
                     //If the child is not on the open list or if it's costs are cheaper, calculate heuristics w/ Manhattan distance
                     //Update existing node/add new
-                    if (CurrentNode.FCost < neighbour.FCost || !OpenList.Contains(neighbour))
+                    if (CurrentNode.FCost > neighbour.FCost || !OpenList.Contains(neighbour))
                     {
                         neighbour.Parent = CurrentNode;
 
@@ -214,7 +215,7 @@ namespace RobotNavigationProblem
             {
                 currentNode = openList[0];
                 //Get the current node
-                //Let the currentNode equal the node with the lowest f value
+                //Let the currentNode equal the node with the lowest heuristic value
                 for (int i = 0; i < openList.Count; i++)
                 {
                     if (openList[i].HCost < currentNode.HCost)

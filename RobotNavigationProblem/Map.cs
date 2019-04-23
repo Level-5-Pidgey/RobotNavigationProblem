@@ -82,6 +82,7 @@ namespace RobotNavigationProblem
                 {
                     coords = sets[i].Trim('(', ')').Split(',');
                     MapValues[coords[0].rInt(), coords[1].rInt()] = 3;
+                    //TODO Need to add error checking here.
                     Goal[i] = new Position(coords[0].rInt(), coords[1].rInt());
                 }
 
@@ -146,9 +147,9 @@ namespace RobotNavigationProblem
             int xCheck;
             int yCheck;
 
-            //Check EAST
-            xCheck = node.Position.X + 1;
-            yCheck = node.Position.Y;
+            //Check NORTH
+            xCheck = node.Position.X;
+            yCheck = node.Position.Y + 1;
             if (xCheck >= 0 && xCheck < Dimensions[0])
             {
                 if (yCheck >= 0 && yCheck < Dimensions[1])
@@ -157,9 +158,9 @@ namespace RobotNavigationProblem
                 }
             }
 
-            //Check NORTH
-            xCheck = node.Position.X;
-            yCheck = node.Position.Y + 1;
+            //Check EAST
+            xCheck = node.Position.X + 1;
+            yCheck = node.Position.Y;
             if (xCheck >= 0 && xCheck < Dimensions[0])
             {
                 if (yCheck >= 0 && yCheck < Dimensions[1])
