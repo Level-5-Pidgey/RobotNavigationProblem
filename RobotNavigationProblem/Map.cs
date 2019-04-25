@@ -10,15 +10,11 @@ namespace RobotNavigationProblem
 {
     public class Map
     {
+        //Private variables and properties
         private int[] _dimensions = new int[2] { 0, 0 };
         private byte[,] _mapValues;
         private Position[] _goal = new Position[2];
         private Position _startPos;
-
-        public Map(string fileName)
-        {
-            loadFile(fileName);
-        }
 
         public enum MapCodec : byte
         {
@@ -52,6 +48,18 @@ namespace RobotNavigationProblem
             set => _startPos = value;
         }
 
+        //Constructor
+        public Map(string fileName)
+        {
+            loadFile(fileName);
+        }
+
+        //Methods related to the map
+
+        /// <summary>
+        /// Loads a .txt file into the program.
+        /// </summary>
+        /// <param name="fileName">String providing a relative path to the file that should be opened</param>
         public void loadFile(string fileName)
         {
             //Place all lines of the file onto the parsed list
@@ -63,8 +71,8 @@ namespace RobotNavigationProblem
                 //We know what must be trimmed in each order (as the file is saved in a particular format)
                 //First we need to set the dimensions of the field/map and then create it
                 string[] coords = line.Trim('[', ']').Split(',');
-                Dimensions[0] = coords[1].rInt();
-                Dimensions[1] = coords[0].rInt();
+                Dimensions[0] = coords[1].ReturnInt();
+                Dimensions[1] = coords[0].ReturnInt();
 
                 MapValues = new byte[Dimensions[0], Dimensions[1]];
 
@@ -72,8 +80,8 @@ namespace RobotNavigationProblem
                 //Inputting the player's co-ordinates onto the map.
                 line = reader.ReadLine();
                 coords = line.Trim('(', ')').Split(',');
-                MapValues[coords[0].rInt(), coords[1].rInt()] = 2;
-                StartPos = new Position(coords[0].rInt(), coords[1].rInt());
+                MapValues[coords[0].ReturnInt(), coords[1].ReturnInt()] = 2;
+                StartPos = new Position(coords[0].ReturnInt(), coords[1].ReturnInt());
 
                 //Adding the goal states in
                 line = reader.ReadLine();
@@ -81,9 +89,9 @@ namespace RobotNavigationProblem
                 for (int i = 0; i < sets.Length; i++)
                 {
                     coords = sets[i].Trim('(', ')').Split(',');
-                    MapValues[coords[0].rInt(), coords[1].rInt()] = 3;
+                    MapValues[coords[0].ReturnInt(), coords[1].ReturnInt()] = 3;
                     //TODO Need to add error checking here.
-                    Goal[i] = new Position(coords[0].rInt(), coords[1].rInt());
+                    Goal[i] = new Position(coords[0].ReturnInt(), coords[1].ReturnInt());
                 }
 
                 //Reading boundaries/walls now, in a loop
@@ -92,11 +100,11 @@ namespace RobotNavigationProblem
                     line = reader.ReadLine();
                     coords = line.Trim('(', ')').Split(',');
 
-                    for (int i = 0; i < coords[2].rInt(); i++)
+                    for (int i = 0; i < coords[2].ReturnInt(); i++)
                     {
-                        for(int j = 0; j < coords[3].rInt(); j++)
+                        for(int j = 0; j < coords[3].ReturnInt(); j++)
                         {
-                            MapValues[coords[0].rInt() + i, coords[1].rInt() + j] = 1;
+                            MapValues[coords[0].ReturnInt() + i, coords[1].ReturnInt() + j] = 1;
                         }
                     }
                 }
@@ -140,6 +148,11 @@ namespace RobotNavigationProblem
             #endregion
         }
 
+        /// <summary>
+        /// Provides all of the valid (within map bounds, does not check if they are within a wall/obstacle as this is done by each algorithm) neighbours to a provided node.
+        /// </summary>
+        /// <param name="node">Node that is being searched around for potential neighbours on an orthogonal plane.</param>
+        /// <returns>A list of valid nodes that can be explored by a search algorithm.</returns>
         public List<Node> GetNeighbouringNodes(Node node)
         {
             List<Node> neighbouringNodes = new List<Node>();
@@ -147,20 +160,9 @@ namespace RobotNavigationProblem
             int xCheck;
             int yCheck;
 
-            //Check NORTH
+            //Check SOUTH
             xCheck = node.Position.X;
-            yCheck = node.Position.Y + 1;
-            if (xCheck >= 0 && xCheck < Dimensions[0])
-            {
-                if (yCheck >= 0 && yCheck < Dimensions[1])
-                {
-                    neighbouringNodes.Add(new Node(new Position(xCheck, yCheck)));
-                }
-            }
-
-            //Check EAST
-            xCheck = node.Position.X + 1;
-            yCheck = node.Position.Y;
+            yCheck = node.Position.Y - 1;
             if (xCheck >= 0 && xCheck < Dimensions[0])
             {
                 if (yCheck >= 0 && yCheck < Dimensions[1])
@@ -180,9 +182,20 @@ namespace RobotNavigationProblem
                 }
             }
 
-            //Check SOUTH
+            //Check EAST
+            xCheck = node.Position.X + 1;
+            yCheck = node.Position.Y;
+            if (xCheck >= 0 && xCheck < Dimensions[0])
+            {
+                if (yCheck >= 0 && yCheck < Dimensions[1])
+                {
+                    neighbouringNodes.Add(new Node(new Position(xCheck, yCheck)));
+                }
+            }
+
+            //Check NORTH
             xCheck = node.Position.X;
-            yCheck = node.Position.Y - 1;
+            yCheck = node.Position.Y + 1;
             if (xCheck >= 0 && xCheck < Dimensions[0])
             {
                 if (yCheck >= 0 && yCheck < Dimensions[1])
@@ -195,6 +208,12 @@ namespace RobotNavigationProblem
         }
 
         //3 Methods for checking the validity of the path being made by an algorithm, can be used (or scrapped) later if not required
+        
+        /// <summary>
+        /// Checks if the position being given is both not within a wall and is within the bounds of the map.
+        /// </summary>
+        /// <param name="p">Position to be checked</param>
+        /// <returns>Boolean -- if true, the position is a valid spot to be moved to/explored</returns>
         public bool IsValid(Position p)
         {
             if(IsNotWall(p) && IsInBounds(p))
@@ -207,6 +226,11 @@ namespace RobotNavigationProblem
             }
         }
 
+        /// <summary>
+        /// Checks if a position is within a wall object as labelled on the map.
+        /// </summary>
+        /// <param name="p">Position to check if within a wall or not</param>
+        /// <returns>Returns true if the position is not a wall, false if it is.</returns>
         public bool IsNotWall(Position p)
         {
             if(MapValues[p.X, p.Y] == (byte)MapCodec.Wall)
@@ -219,6 +243,11 @@ namespace RobotNavigationProblem
             }
         }
 
+        /// <summary>
+        /// Checks if a position is within the boundaries of the map.
+        /// </summary>
+        /// <param name="p">Position to check if within the dimensions of the map</param>
+        /// <returns>Returns true if the position is not outside of the map's bounds, false if it is.</returns>
         public bool IsInBounds(Position p)
         {
             if (p.X < 0 || p.Y < 0 || p.X >= Dimensions[0] || p.Y >= Dimensions[1])

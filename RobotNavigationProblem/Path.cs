@@ -8,6 +8,7 @@ namespace RobotNavigationProblem
 {
     public class Path
     {
+        //Private variables and properties
         private List<Node> _path = new List<Node>();
 
         internal List<Node> PathCollection
@@ -32,6 +33,11 @@ namespace RobotNavigationProblem
 
         public Path() { }
 
+        //Methods for Paths
+
+        /// <summary>
+        /// Prints a list of directions the "player" would have to travel to get to the goal, on an orthogonal plane
+        /// </summary>
         public void PrintDirectionOutput()
         {
             for (int i = 1; i < PathCollection.Count; i++)
@@ -42,7 +48,9 @@ namespace RobotNavigationProblem
             Console.WriteLine(); //New line return after complete output of directions
         }
 
-        //REMOVE ME LATER
+        /// <summary>
+        /// Prints all positions within a path, separated by semi-colons.
+        /// </summary>
         public void PrintPositionOutput()
         {
             foreach (Node n in PathCollection)
@@ -53,6 +61,12 @@ namespace RobotNavigationProblem
             Console.WriteLine(); //New line return after complete output of directions
         }
 
+        /// <summary>
+        /// Gets a relevant direction (up/down/left/right) by comparing the positions of two nodes.
+        /// </summary>
+        /// <param name="posA">Position 1 to compare to Position 2</param>
+        /// <param name="posB">Position 2 to compare to Position 1</param>
+        /// <returns>A direction (by enum) to print to the console/be used in other methods</returns>
         private Direction GetDirection(Position posA, Position posB)
         {
             //Note: When all else is equal, nodes should be expanded

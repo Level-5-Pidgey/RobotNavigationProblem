@@ -8,17 +8,10 @@ namespace RobotNavigationProblem
 {
     public class Node : IEquatable<Node>
     {
-        //Need to add depth of node
-
+        //Private variables and properties
         private float _gCost;
         private float _hCost;
         private Position _position;
-
-        public Node(Position pos, Node parent = null)
-        {
-            Position = pos;
-            Parent = parent;
-        }
 
         //To assign the node "previous" to it -- the parent node leading from the origin
         public Node Parent
@@ -53,6 +46,13 @@ namespace RobotNavigationProblem
             }
         }
 
+        //Constructor
+        public Node(Position pos, Node parent = null)
+        {
+            Position = pos;
+            Parent = parent;
+            GCost = 0;
+        }
 
         //To allow for more easy comparison between nodes, we can implement IEquatable<T> to it -- which allows us to define that when comparing two nodes, we actually want to compare
         //two positions.
@@ -68,6 +68,7 @@ namespace RobotNavigationProblem
             return Equals(obj as Node);
         }
 
+        //To prevent warnings/errors, the default/suggest HashCode is used (as provided by Visual Studio)
         public override int GetHashCode()
         {
             return -425505606 + EqualityComparer<Position>.Default.GetHashCode(Position);
