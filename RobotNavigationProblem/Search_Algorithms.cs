@@ -11,7 +11,10 @@ namespace RobotNavigationProblem
     {
         //Private variables and properties
         private Map _map;
-        private int _numNodes;
+        private int _collectiveNodeCount;
+        private int _frontierCount;
+        private int _iterationCount;
+        private const int MAX_ITERATIONS = 100000;
 
         public Search_Algorithms(Map map)
         {
@@ -24,10 +27,22 @@ namespace RobotNavigationProblem
             set => _map = value;
         }
 
-        public int NumNodes
+        public int CollectiveNodeCount
         {
-            get => _numNodes;
-            private set => _numNodes = value;
+            get => _collectiveNodeCount;
+            private set => _collectiveNodeCount = value;
+        }
+
+        public int FrontierCount
+        {
+            get => _frontierCount;
+            private set => _frontierCount = value;
+        }
+
+        public int IterationCount
+        {
+            get => _iterationCount;
+            private set => _iterationCount = value;
         }
 
         //Pathfinding methods 
@@ -41,7 +56,9 @@ namespace RobotNavigationProblem
         public Path FindDFS(Position start, Position goal)
         {
             //Reset the nodes searched counter, for diagnostics purposes.
-            NumNodes = 0;
+            CollectiveNodeCount = 0;
+            FrontierCount = 0;
+            IterationCount = 0;
 
             Node startNode = new Node(start);
             Node currentNode = new Node(start);
@@ -63,6 +80,13 @@ namespace RobotNavigationProblem
                     break;
                 }
 
+                //Checking if the current iteration count has exceeded the max allowed iteration count
+                if (IterationCount > MAX_ITERATIONS)
+                {
+                    //The search has iterated over the maximum number assumed to find a route. This means either there is no valid path, or the path is extremely long
+                    break;
+                }
+
                 foreach (Node neighbour in Map.GetNeighbouringNodes(currentNode))
                 {
                     if (closedList.Contains(neighbour) || !Map.IsValid(neighbour.Position))
@@ -76,11 +100,15 @@ namespace RobotNavigationProblem
                         openList.Add(neighbour);
                     }
                 }
+
+                //Update iteration count. For demonstrative purposes + to catch if there's no valid path.
+                IterationCount++;
             }
 
             if (currentNode.Equals(goalNode))
             {
-                NumNodes = openList.Count + closedList.Count;
+                CollectiveNodeCount = openList.Count + closedList.Count;
+                FrontierCount = openList.Count;
                 return GetFinalPath(startNode, currentNode);
             }
             else
@@ -98,7 +126,8 @@ namespace RobotNavigationProblem
         public Path FindBFS(Position start, Position goal)
         {
             //Reset the nodes searched counter, for diagnostics purposes.
-            NumNodes = 0;
+            CollectiveNodeCount = 0;
+            FrontierCount = 0;
 
             Node startNode = new Node(start);
             Node goalNode = new Node(goal);
@@ -119,6 +148,13 @@ namespace RobotNavigationProblem
                     break;
                 }
 
+                //Checking if the current iteration count has exceeded the max allowed iteration count
+                if (IterationCount > MAX_ITERATIONS)
+                {
+                    //The search has iterated over the maximum number assumed to find a route. This means either there is no valid path, or the path is extremely long
+                    break;
+                }
+
                 foreach (Node neighbour in Map.GetNeighbouringNodes(currentNode))
                 {
                     if (closedList.Contains(neighbour) || !Map.IsValid(currentNode.Position))
@@ -132,11 +168,15 @@ namespace RobotNavigationProblem
                         openList.Enqueue(neighbour);
                     }
                 }
+
+                //Update iteration count. For demonstrative purposes + to catch if there's no valid path.
+                IterationCount++;
             }
 
             if (currentNode.Equals(goalNode))
             {
-                NumNodes = openList.Count + closedList.Count;
+                CollectiveNodeCount = openList.Count + closedList.Count;
+                FrontierCount = openList.Count;
                 return GetFinalPath(startNode, currentNode);
             }
             else
@@ -154,7 +194,8 @@ namespace RobotNavigationProblem
         public Path FindGreedyBest(Position start, Position goal)
         {
             //Reset the nodes searched counter, for diagnostics purposes.
-            NumNodes = 0;
+            CollectiveNodeCount = 0;
+            FrontierCount = 0;
 
             Node startNode = new Node(start);
             Node goalNode = new Node(goal);
@@ -180,6 +221,13 @@ namespace RobotNavigationProblem
                     break;
                 }
 
+                //Checking if the current iteration count has exceeded the max allowed iteration count
+                if (IterationCount > MAX_ITERATIONS)
+                {
+                    //The search has iterated over the maximum number assumed to find a route. This means either there is no valid path, or the path is extremely long
+                    break;
+                }
+
                 foreach (Node neighbour in Map.GetNeighbouringNodes(currentNode))
                 {
                     if (closedList.Contains(neighbour) || !Map.IsValid(neighbour.Position))
@@ -193,11 +241,15 @@ namespace RobotNavigationProblem
                         openList.Add(neighbour);
                     }
                 }
+
+                //Update iteration count. For demonstrative purposes + to catch if there's no valid path.
+                IterationCount++;
             }
 
             if (currentNode.Equals(goalNode))
             {
-                NumNodes = openList.Count + closedList.Count;
+                CollectiveNodeCount = openList.Count + closedList.Count;
+                FrontierCount = openList.Count;
                 return GetFinalPath(startNode, currentNode);
             }
             else
@@ -215,7 +267,8 @@ namespace RobotNavigationProblem
         public Path FindAStar(Position start, Position goal)
         {
             //Reset the nodes searched counter, for diagnostics purposes.
-            NumNodes = 0;
+            CollectiveNodeCount = 0;
+            FrontierCount = 0;
 
             Node startNode = new Node(start);
             Node goalNode = new Node(goal);
@@ -250,6 +303,13 @@ namespace RobotNavigationProblem
                     break;
                 }
 
+                //Checking if the current iteration count has exceeded the max allowed iteration count
+                if (IterationCount > MAX_ITERATIONS)
+                {
+                    //The search has iterated over the maximum number assumed to find a route. This means either there is no valid path, or the path is extremely long
+                    break;
+                }
+
                 //For each connected/child node around the currently explored node,
                 //generate children
                 foreach (Node neighbour in Map.GetNeighbouringNodes(currentNode))
@@ -276,11 +336,15 @@ namespace RobotNavigationProblem
                         }
                     }
                 }
+
+                //Update iteration count. For demonstrative purposes + to catch if there's no valid path.
+                IterationCount++;
             }
 
             if (currentNode.Equals(goalNode))
             {
-                NumNodes = openList.Count + closedList.Count;
+                CollectiveNodeCount = openList.Count + closedList.Count;
+                FrontierCount = openList.Count;
                 return GetFinalPath(startNode, currentNode);
             }
             else
@@ -298,7 +362,8 @@ namespace RobotNavigationProblem
         public Path FindUniformCost(Position start, Position goal)
         {
             //Reset the nodes searched counter, for diagnostics purposes.
-            NumNodes = 0;
+            CollectiveNodeCount = 0;
+            FrontierCount = 0;
 
             Node startNode = new Node(start);
             Node goalNode = new Node(goal);
@@ -317,6 +382,13 @@ namespace RobotNavigationProblem
 
                 if (currentNode.Equals(goalNode))
                 {
+                    break;
+                }
+
+                //Checking if the current iteration count has exceeded the max allowed iteration count
+                if (IterationCount > MAX_ITERATIONS)
+                {
+                    //The search has iterated over the maximum number assumed to find a route. This means either there is no valid path, or the path is extremely long
                     break;
                 }
 
@@ -339,11 +411,15 @@ namespace RobotNavigationProblem
                         }
                     }
                 }
+
+                //Update iteration count. For demonstrative purposes + to catch if there's no valid path.
+                IterationCount++;
             }
 
             if (currentNode.Equals(goalNode))
             {
-                NumNodes = openList.Count + closedList.Count;
+                CollectiveNodeCount = openList.Count + closedList.Count;
+                FrontierCount = openList.Count;
                 return GetFinalPath(startNode, currentNode);
             }
             else
@@ -361,7 +437,8 @@ namespace RobotNavigationProblem
         public Path FindBidirectionalBFS(Position start, Position goal)
         {
             //Reset the nodes searched counter, for diagnostics purposes.
-            NumNodes = 0;
+            CollectiveNodeCount = 0;
+            FrontierCount = 0;
 
             Node startNode = new Node(start);
             Node goalNode = new Node(goal);
@@ -387,11 +464,22 @@ namespace RobotNavigationProblem
                 {
                     break;
                 }
+
+                //Checking if the current iteration count has exceeded the max allowed iteration count
+                if (IterationCount > MAX_ITERATIONS)
+                {
+                    //The search has iterated over the maximum number assumed to find a route. This means either there is no valid path, or the path is extremely long
+                    break;
+                }
+
+                //Update iteration count. For demonstrative purposes + to catch if there's no valid path.
+                IterationCount++;
             }
 
             if (BidirectionalIntersection(openList2, openList1) != null)
             {
-                NumNodes = openList2.Count + openList1.Count + closedList.Count;
+                CollectiveNodeCount = openList2.Count + openList1.Count + closedList.Count;
+                FrontierCount = openList1.Count + openList2.Count;
                 return GetBidirectionalPath(openList1, openList2, startNode, goalNode);
             }
             else

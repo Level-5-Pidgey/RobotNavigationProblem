@@ -53,7 +53,9 @@ namespace RobotNavigationProblem
                         pathSearchTimer.Stop();
 
                         //Output number of nodes on both open/closed list to find a result.
-                        Console.WriteLine("Number of Nodes Explored: " + pathSearch.NumNodes);
+                        Console.WriteLine("Nodes in Frontier: " + pathSearch.FrontierCount);
+                        Console.WriteLine("Culminative Node Count: " + pathSearch.CollectiveNodeCount);
+                        Console.WriteLine("Iterations Required: " + pathSearch.IterationCount);
 
                         Console.WriteLine("Positions:");
                         path.PrintPositionOutput();
@@ -69,7 +71,9 @@ namespace RobotNavigationProblem
                         Console.WriteLine("");
 
                         //Output number of nodes on both open/closed list to find a result.
-                        Console.WriteLine("Number of Nodes Explored: " + pathSearch.NumNodes);
+                        Console.WriteLine("Nodes in Frontier: " + pathSearch.FrontierCount);
+                        Console.WriteLine("Culminative Node Count: " + pathSearch.CollectiveNodeCount);
+                        Console.WriteLine("Iterations Required: " + pathSearch.IterationCount);
 
                         Console.WriteLine("Positions:");
                         path.PrintPositionOutput();
@@ -97,7 +101,9 @@ namespace RobotNavigationProblem
                         pathSearchTimer.Stop();
 
                         //Output number of nodes on both open/closed list to find a result.
-                        Console.WriteLine("Number of Nodes Explored: " + pathSearch.NumNodes);
+                        Console.WriteLine("Nodes in Frontier: " + pathSearch.FrontierCount);
+                        Console.WriteLine("Culminative Node Count: " + pathSearch.CollectiveNodeCount);
+                        Console.WriteLine("Iterations Required: " + pathSearch.IterationCount);
 
                         Console.WriteLine("Positions:");
                         path.PrintPositionOutput();
@@ -113,7 +119,9 @@ namespace RobotNavigationProblem
                         Console.WriteLine("");
 
                         //Output number of nodes on both open/closed list to find a result.
-                        Console.WriteLine("Number of Nodes Explored: " + pathSearch.NumNodes);
+                        Console.WriteLine("Nodes in Frontier: " + pathSearch.FrontierCount);
+                        Console.WriteLine("Culminative Node Count: " + pathSearch.CollectiveNodeCount);
+                        Console.WriteLine("Iterations Required: " + pathSearch.IterationCount);
 
                         Console.WriteLine("Positions:");
                         path.PrintPositionOutput();
@@ -141,7 +149,9 @@ namespace RobotNavigationProblem
                         pathSearchTimer.Stop();
 
                         //Output number of nodes on both open/closed list to find a result.
-                        Console.WriteLine("Number of Nodes Explored: " + pathSearch.NumNodes);
+                        Console.WriteLine("Nodes in Frontier: " + pathSearch.FrontierCount);
+                        Console.WriteLine("Culminative Node Count: " + pathSearch.CollectiveNodeCount);
+                        Console.WriteLine("Iterations Required: " + pathSearch.IterationCount);
 
                         Console.WriteLine("Positions:");
                         path.PrintPositionOutput();
@@ -157,7 +167,9 @@ namespace RobotNavigationProblem
                         Console.WriteLine("");
 
                         //Output number of nodes on both open/closed list to find a result.
-                        Console.WriteLine("Number of Nodes Explored: " + pathSearch.NumNodes);
+                        Console.WriteLine("Nodes in Frontier: " + pathSearch.FrontierCount);
+                        Console.WriteLine("Culminative Node Count: " + pathSearch.CollectiveNodeCount);
+                        Console.WriteLine("Iterations Required: " + pathSearch.IterationCount);
 
                         Console.WriteLine("Positions:");
                         path.PrintPositionOutput();
@@ -185,7 +197,9 @@ namespace RobotNavigationProblem
                         pathSearchTimer.Stop();
 
                         //Output number of nodes on both open/closed list to find a result.
-                        Console.WriteLine("Number of Nodes Explored: " + pathSearch.NumNodes);
+                        Console.WriteLine("Nodes in Frontier: " + pathSearch.FrontierCount);
+                        Console.WriteLine("Culminative Node Count: " + pathSearch.CollectiveNodeCount);
+                        Console.WriteLine("Iterations Required: " + pathSearch.IterationCount);
 
                         Console.WriteLine("Positions:");
                         path.PrintPositionOutput();
@@ -201,7 +215,9 @@ namespace RobotNavigationProblem
                         Console.WriteLine("");
 
                         //Output number of nodes on both open/closed list to find a result.
-                        Console.WriteLine("Number of Nodes Explored: " + pathSearch.NumNodes);
+                        Console.WriteLine("Nodes in Frontier: " + pathSearch.FrontierCount);
+                        Console.WriteLine("Culminative Node Count: " + pathSearch.CollectiveNodeCount);
+                        Console.WriteLine("Iterations Required: " + pathSearch.IterationCount);
 
                         Console.WriteLine("Positions:");
                         path.PrintPositionOutput();
@@ -229,7 +245,9 @@ namespace RobotNavigationProblem
                         pathSearchTimer.Stop();
 
                         //Output number of nodes on both open/closed list to find a result.
-                        Console.WriteLine("Number of Nodes Explored: " + pathSearch.NumNodes);
+                        Console.WriteLine("Nodes in Frontier: " + pathSearch.FrontierCount);
+                        Console.WriteLine("Culminative Node Count: " + pathSearch.CollectiveNodeCount);
+                        Console.WriteLine("Iterations Required: " + pathSearch.IterationCount);
 
                         Console.WriteLine("Positions:");
                         path.PrintPositionOutput();
@@ -245,7 +263,9 @@ namespace RobotNavigationProblem
                         Console.WriteLine("");
 
                         //Output number of nodes on both open/closed list to find a result.
-                        Console.WriteLine("Number of Nodes Explored: " + pathSearch.NumNodes);
+                        Console.WriteLine("Nodes in Frontier: " + pathSearch.FrontierCount);
+                        Console.WriteLine("Culminative Node Count: " + pathSearch.CollectiveNodeCount);
+                        Console.WriteLine("Iterations Required: " + pathSearch.IterationCount);
 
                         Console.WriteLine("Positions:");
                         path.PrintPositionOutput();
@@ -273,7 +293,9 @@ namespace RobotNavigationProblem
                         pathSearchTimer.Stop();
 
                         //Output number of nodes on both open/closed list to find a result.
-                        Console.WriteLine("Number of Nodes Explored: " + pathSearch.NumNodes);
+                        Console.WriteLine("Nodes in Frontier: " + pathSearch.FrontierCount);
+                        Console.WriteLine("Culminative Node Count: " + pathSearch.CollectiveNodeCount);
+                        Console.WriteLine("Iterations Required: " + pathSearch.IterationCount);
 
                         Console.WriteLine("Positions:");
                         path.PrintPositionOutput();
@@ -289,7 +311,9 @@ namespace RobotNavigationProblem
                         Console.WriteLine("");
 
                         //Output number of nodes on both open/closed list to find a result.
-                        Console.WriteLine("Number of Nodes Explored: " + pathSearch.NumNodes);
+                        Console.WriteLine("Nodes in Frontier: " + pathSearch.FrontierCount);
+                        Console.WriteLine("Culminative Node Count: " + pathSearch.CollectiveNodeCount);
+                        Console.WriteLine("Iterations Required: " + pathSearch.IterationCount);
 
                         Console.WriteLine("Positions:");
                         path.PrintPositionOutput();
