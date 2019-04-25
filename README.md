@@ -17,7 +17,7 @@ Search <filename> <dfs|bfs|astar|greedybest|uniformcost|bidirectional>
 ```
 The filename is a *relative path* to the file from the Search.exe (so for ease of use, place your .txt files in the same directory as the *Search* executable) and the filetype is not required (as it is appended automatically).
 
-Some example file
+Some example files that I've personally used to test my program have already been included within the folder but you are free to use and add your own to test your mazes.
 
 Example usage:
 ```c#
