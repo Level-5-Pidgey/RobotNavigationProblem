@@ -404,8 +404,7 @@ namespace RobotNavigationProblem
                     neighbour.GCost = neighbour.Parent.GCost + 1;
 
                     if (currentNode.GCost < neighbour.GCost)
-                    {
-
+                    { 
                         if (!openList.Contains(neighbour))
                         {
                             openList.Enqueue(neighbour);

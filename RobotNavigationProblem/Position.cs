@@ -18,19 +18,19 @@ namespace RobotNavigationProblem
             get => _x;
             private set => _x = value;
         }
+
         public int Y
         {
             get => _y;
             private set => _y = value;
         }
 
-        public Position (int x, int y)
+        public Position(int x, int y)
         {
-            this.X = x;
-            this.Y = y;
+            X = x;
+            Y = y;
         }
 
-        //REMOVE ME LATER
         //Override default toString method to allow for the positions to be printed to the console as an output.
         public override string ToString()
         {
