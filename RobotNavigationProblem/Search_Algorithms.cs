@@ -113,7 +113,7 @@ namespace RobotNavigationProblem
             }
             else
             {
-                throw new Exception("Error with DFS Algorithm.");
+                throw new Exception("Error with DFS Algorithm. Either there is no valid path, or one cannot be found.");
             }
         }
 
@@ -128,6 +128,7 @@ namespace RobotNavigationProblem
             //Reset the nodes searched counter, for diagnostics purposes.
             CollectiveNodeCount = 0;
             FrontierCount = 0;
+            IterationCount = 0;
 
             Node startNode = new Node(start);
             Node goalNode = new Node(goal);
@@ -181,7 +182,7 @@ namespace RobotNavigationProblem
             }
             else
             {
-                throw new Exception("Error with BFS Algorithm.");
+                throw new Exception("Error with BFS Algorithm. Either there is no valid path, or one cannot be found.");
             }
         }
 
@@ -196,24 +197,21 @@ namespace RobotNavigationProblem
             //Reset the nodes searched counter, for diagnostics purposes.
             CollectiveNodeCount = 0;
             FrontierCount = 0;
+            IterationCount = 0;
 
             Node startNode = new Node(start);
             Node goalNode = new Node(goal);
 
-            List<Node> openList = new List<Node>();
+            Queue<Node> openList = new Queue<Node>();
             HashSet<Node> closedList = new HashSet<Node>();
 
             Node currentNode = startNode;
-            openList.Add(currentNode);
+            openList.Enqueue(currentNode);
             currentNode.HCost = GetManhattanDistance(currentNode, goalNode);
 
             while (openList.Count != 0)
             {
-                //Sort list and place the lowest heuristic cost node to the start (node to prioritize searching next)
-                openList.Sort((n1, n2) => (n1.HCost).CompareTo(n2.HCost));
-                currentNode = openList[0];
-
-                openList.Remove(currentNode);
+                currentNode = openList.Dequeue();
                 closedList.Add(currentNode);
 
                 if (currentNode.Equals(goalNode))
@@ -234,11 +232,12 @@ namespace RobotNavigationProblem
                     {
                         continue;
                     }
-                        
-                    if (!openList.Contains(neighbour))
+
+                    neighbour.HCost = GetManhattanDistance(neighbour, goalNode);
+                    if (!openList.Contains(neighbour) || currentNode.HCost > neighbour.HCost)
                     {
                         neighbour.Parent = currentNode;
-                        openList.Add(neighbour);
+                        openList.Enqueue(neighbour);
                     }
                 }
 
@@ -254,7 +253,7 @@ namespace RobotNavigationProblem
             }
             else
             {
-                throw new Exception("Error with Greedy Best First Algorithm.");
+                throw new Exception("Error with Greedy Best First Algorithm. Either there is no valid path, or one cannot be found.");
             }
         }
 
@@ -269,6 +268,7 @@ namespace RobotNavigationProblem
             //Reset the nodes searched counter, for diagnostics purposes.
             CollectiveNodeCount = 0;
             FrontierCount = 0;
+            IterationCount = 0;
 
             Node startNode = new Node(start);
             Node goalNode = new Node(goal);
@@ -349,7 +349,7 @@ namespace RobotNavigationProblem
             }
             else
             {
-                throw new Exception("Error with A* Algorithm.");
+                throw new Exception("Error with A* Algorithm. Either there is no valid path, or one cannot be found.");
             }
         }
 
@@ -364,6 +364,7 @@ namespace RobotNavigationProblem
             //Reset the nodes searched counter, for diagnostics purposes.
             CollectiveNodeCount = 0;
             FrontierCount = 0;
+            IterationCount = 0;
 
             Node startNode = new Node(start);
             Node goalNode = new Node(goal);
@@ -424,7 +425,7 @@ namespace RobotNavigationProblem
             }
             else
             {
-                throw new Exception("Error with Uniform Cost Search algorithm.");
+                throw new Exception("Error with Uniform Cost Search algorithm. Either there is no valid path, or one cannot be found.");
             }
         }
 
@@ -439,6 +440,7 @@ namespace RobotNavigationProblem
             //Reset the nodes searched counter, for diagnostics purposes.
             CollectiveNodeCount = 0;
             FrontierCount = 0;
+            IterationCount = 0;
 
             Node startNode = new Node(start);
             Node goalNode = new Node(goal);
@@ -457,8 +459,6 @@ namespace RobotNavigationProblem
             {
                 BidirectionalBFS(openList1, closedList, currentNode1);
                 BidirectionalBFS(openList2, closedList, currentNode2);
-
-                Debug.WriteLine("CurrentNode1: " + currentNode1.Position.ToString() + " -- CurrentNode2: " + currentNode2.Position.ToString());
 
                 if (BidirectionalIntersection(openList1, openList2) != null)
                 {
@@ -484,7 +484,7 @@ namespace RobotNavigationProblem
             }
             else
             {
-                throw new Exception("Error with UBFS Algorithm.");
+                throw new Exception("Error with UBFS Algorithm. Either there is no valid path, or one cannot be found.");
             }
         }
 
