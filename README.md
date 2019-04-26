@@ -7,7 +7,7 @@ do some self-learning to learn several search methods (not covered in the lectur
 
 ## Installation
 
-Clone the repo or download the repo in a .zip file format. The source code is free to be viewed, and the program has already been built in the /bin/Debug/ folder of the solution.
+Clone the repo or download the repo in a .zip file format. The executable file will need to be re-built however by building the solution, however.
 
 ## Usage
 
